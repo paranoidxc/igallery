@@ -57,6 +57,8 @@
         position: absolute;
         top: 0;
       }
+      .dock,
+      .undock,
       #prev,
       #next {
         z-index: 100000;
@@ -70,6 +72,10 @@
       #next {
         right: 0;
       }
+      .undock,
+      .dock {
+        right: 5px;
+      }
     </style>
   </head>
   <body>
@@ -77,10 +83,6 @@
       <p>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</p>
       <p>requirement: jquery-1.4.2</p>
       <p>requirement: timers-1.1.2</p>
-      <p>
-        <input type="button" id="undock" value="undock"/>---
-        <input type="button" id="dock" value="dock"/>
-      </p>
     </div>
 
     <div id="igallery">
@@ -100,6 +102,7 @@
         <li><img src="images/08s.jpg" source_src="images/08.jpg" /></li>
       </ul>
       <img src="images/next.png" id="next"/>
+      <img src="images/undock.png" class="dock"/>
     </div>
 
   </body>

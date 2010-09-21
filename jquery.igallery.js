@@ -1,15 +1,55 @@
 $(document).ready(function(){
+
   $('#undock').click(function(){
-    $('#igallery').animate({ height: "+="+60, }, 400 );
+    $('#igallery').animate({ height: "+="+60 }, 400 );
   });
 
   $('#dock').click(function(){
-    $('#igallery').animate({ height: "-="+60, }, 400 );
+    $('#igallery').animate({ height: "-="+60 }, 400 );
   });
 
   var $i= -1;
   var thumb_frame = $('.thumb_frame');
   thumb_frame.css({'left':(800 - thumb_frame.innerWidth())/2 });
+
+  /**
+   * step
+   * init width of thumb_frame 
+   * init next img pointer position
+   * init prev img pointer position
+   * init dock/undock img pointer position
+   *
+   */
+  var width = 800;
+  var igallery = $('#igallery');
+
+  var ig_thumb_frame = $('.thumb_frame');
+  var thumb_img_items = ig_thumb_frame.find('img').length;
+  var ig_thumb_frame_width = thumb_img_items*50+thumb_img_items*10;
+  ig_thumb_frame.css({'width': ig_thumb_frame_width});
+
+  var ig_next = igallery.find('#next');
+  ig_next.css({'left': ig_thumb_frame_width + ig_thumb_frame.position().left });
+
+  var ig_prev = igallery.find('#prev');
+  ig_prev.css({'left': ig_thumb_frame.position().left-30 });
+
+
+  igallery.find('.undock').click(dock);
+  igallery.find('.dock').click(undock);
+
+  function dock() {
+    igallery.find('.dock,.undock').unbind('click');
+    $('#igallery').animate({ height: "-="+60 }, 400 );
+    $(this).removeClass('dock').addClass('undock').click(undock).attr('src','images/undock.png');
+  }
+
+  function undock(){
+    igallery.find('.dock,.undock').unbind('click');
+    $('#igallery').animate({ height: "+="+60 }, 400 );
+    $(this).removeClass('undock').addClass('dock').click(dock).attr('src','images/dock.png');
+  }
+
 
   function showItem($j) {
     var last_index  = $j-1;
