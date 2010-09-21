@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>xiaochuanHuang's igallery jquery plugin</title>
+    <link type="text/css" rel="stylesheet" href="reset.css" /> 
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery.timers-1.1.2.js"></script>
+    <script type="text/javascript" src="jquery.igallery.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          var $i= -1;
+
+          function showItem($j) {
+            $('img.#next').unbind('click');
+      			$('img.#prev').unbind('click');
+            //console.log("SHOW ITEM  === "+$j);
+            if( $j >= $('.thumb_frame li img').length ) {
+              $j=0;
+            }else if( $j < 0 ){
+              $j = $('.thumb_frame li img').length -1;
+            }
+            $i=$j;
+            if( $("#current_2").attr('src').length > 0 ) {
+              $('#current_1').stop(true,true).attr('src', $('#current_2').attr('src')).css({'display':'block','z-index':1001}).fadeOut(400);
+            }
+
+            $('#current_2')
+            .css({'display':'none','z-index':1000}).stop(true,true)
+            .attr('src', $($('.thumb_frame li')[$j]).find('img').attr('source_src')).fadeIn(400);
+
+            $('img.#next').click(showNextItem);
+						$('img.#prev').click(showPrevItem);		
+          }
+
+          function showPrevItem() {
+            $(document).stopTime("transition");
+            showItem(--$i);
+            $(document).everyTime(2000,"transition",function(){
+              showNextItem();
+            });
+
+          }
+
+          function showNextItem() {
+            $(document).stopTime("transition");
+            //console.log( $i );
+            showItem(++$i);
+            $(document).everyTime(2000,"transition",function(){
+              showNextItem();
+            });
+          }
+
+          showNextItem();
+
+          $("#next").click(showNextItem);
+          $("#prev").click(showPrevItem);
+
+          $('.thumb_frame li').click(function(){
+            $(document).stopTime("transition");
+            showItem($(this).index());
+            $(document).everyTime(2000,"transition",function(){
+              showNextItem();
+            });
+          });
+      });
+     </script>
+    <style (type="text/css">
+      #igallery {
+        width: 800px;
+        height: 300px;
+        margin: auto;
+        margin-top: 100px;
+        border: 2px solid #131313;
+        position: relative;
+      }
+      #overlay {
+        opacity: 0.5;
+        filter:alpha(opacity=50);
+        background: #000;
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        z-index: 1002;
+        width: 100%;
+      }
+      .thumb_frame {
+        z-index: 1003;
+        position: absolute;
+        bottom: 0;
+        padding-left: 100px;
+      }
+      .thumb_frame li  {
+        float: left;
+        margin-right: 10px;
+        cursor: pointer;
+      }
+      .thumb_frame li img {
+        /*
+        display: none;
+        */
+        width: 50px;
+        height: 50px;
+      }
+      .thumb_frame li:first-child img {
+        display: block;
+      }
+      .current {
+        position: absolute;
+        top: 0;
+      }
+      #prev,
+      #next {
+        z-index: 100000;
+        position: absolute;
+        cursor: pointer;
+      }
+      #prev {
+        bottom: 0;
+        left: 0;
+      }
+      #next {
+        bottom: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="t">
+      <p>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</p>
+      <p>requirement: jquery-1.4.2</p>
+      <p>requirement: timers-1.1.2</p>
+    </div>
+    <div id="igallery">
+      <img src='' id='current_1' class="current" />
+      <img src='' id='current_2' class="current"/>
+
+      <div id="overlay">
+      </div>
+
+      <img src="images/prev.png" id="prev"/>
+      <ul class='thumb_frame'>
+        <li><img src="images/01s.jpg" source_src="images/01.jpg"/></li>
+        <li><img src="images/02s.jpg" source_src="images/02.jpg" /></li>
+        <li><img src="images/03s.jpg" source_src="images/03.jpg"/></li>
+        <li><img src="images/04s.jpg" source_src="images/04.jpg"/></li>
+        <li><img src="images/05s.jpg" source_src="images/05.jpg"/></li>
+        <li><img src="images/06s.jpg" source_src="images/06.jpg" /></li>
+        <li><img src="images/07s.jpg" source_src="images/07.jpg" /></li>
+        <li><img src="images/08s.jpg" source_src="images/08.jpg" /></li>
+      </ul>
+      <img src="images/next.png" id="next"/>
+    </div>
+
+  </body>
+</html>
