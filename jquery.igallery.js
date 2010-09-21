@@ -35,19 +35,27 @@ $(document).ready(function(){
   ig_prev.css({'left': ig_thumb_frame.position().left-30 });
 
 
-  igallery.find('.undock').click(dock);
-  igallery.find('.dock').click(undock);
+  igallery.find('.undock').click(undock);
+  igallery.find('.dock').click(dock);
 
   function dock() {
     igallery.find('.dock,.undock').unbind('click');
     $('#igallery').animate({ height: "-="+60 }, 400 );
-    $(this).removeClass('dock').addClass('undock').click(undock).attr('src','images/undock.png');
+    $(this).removeClass('dock')
+      .addClass('undock')
+      .click(undock)
+      .attr('src','images/undock.png')
+      .attr('title','Undock into separate');
   }
 
   function undock(){
     igallery.find('.dock,.undock').unbind('click');
     $('#igallery').animate({ height: "+="+60 }, 400 );
-    $(this).removeClass('undock').addClass('dock').click(dock).attr('src','images/dock.png');
+    $(this).removeClass('undock')
+      .addClass('dock')
+      .click(dock)
+      .attr('src','images/dock.png')
+      .attr('title','Dock into gallery');
   }
 
 
