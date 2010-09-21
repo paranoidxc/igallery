@@ -8,73 +8,16 @@
     <script type="text/javascript" src="jquery.timers-1.1.2.js"></script>
     <script type="text/javascript" src="jquery.igallery.js"></script>
     <script type="text/javascript">
-      $(document).ready(function(){
-          var $i= -1;
-          var thumb_frame = $('.thumb_frame');
- //        alert( (800 - thumb_frame.innerWidth())/2 );
-          thumb_frame.css({'left':(800 - thumb_frame.innerWidth())/2 });
-          function showItem($j) {
-            $('img.#next').unbind('click');
-      			$('img.#prev').unbind('click');
-            //console.log("SHOW ITEM  === "+$j);
-            if( $j >= $('.thumb_frame li img').length ) {
-              $j=0;
-            }else if( $j < 0 ){
-              $j = $('.thumb_frame li img').length -1;
-            }
-            $i=$j;
-            if( $("#current_2").attr('src').length > 0 ) {
-              $('#current_1').stop(true,true).attr('src', $('#current_2').attr('src')).css({'display':'block','z-index':1001}).fadeOut(400);
-            }
-
-            $('#current_2')
-            .css({'display':'none','z-index':1000}).stop(true,true)
-            .attr('src', $($('.thumb_frame li')[$j]).find('img').attr('source_src')).fadeIn(400);
-
-            $('img.#next').click(showNextItem);
-						$('img.#prev').click(showPrevItem);		
-          }
-
-          function showPrevItem() {
-            $(document).stopTime("transition");
-            showItem(--$i);
-            $(document).everyTime(2000,"transition",function(){
-              showNextItem();
-            });
-
-          }
-
-          function showNextItem() {
-            $(document).stopTime("transition");
-            //console.log( $i );
-            showItem(++$i);
-            $(document).everyTime(2000,"transition",function(){
-              showNextItem();
-            });
-          }
-
-          showNextItem();
-
-          $("#next").click(showNextItem);
-          $("#prev").click(showPrevItem);
-
-          $('.thumb_frame li').click(function(){
-            $(document).stopTime("transition");
-            showItem($(this).index());
-            $(document).everyTime(2000,"transition",function(){
-              showNextItem();
-            });
-          });
-      });
-     </script>
+    </script>
     <style (type="text/css">
       #igallery {
         width: 800px;
         height: 300px;
         margin: auto;
         margin-top: 100px;
-        border: 2px solid #131313;
+        border: 5px solid #131313;
         position: relative;
+        background: url(images/div4.jpg) repeat 0 0;
       }
       #overlay {
         opacity: 0.5;
@@ -95,6 +38,7 @@
         float: left;
         margin-right: 10px;
         cursor: pointer;
+        position: relative;
       }
       .thumb_frame li img {
         /*
@@ -102,6 +46,9 @@
         */
         width: 50px;
         height: 50px;
+        background: #000;
+      }
+      .thumb_frame li img:hover {
       }
       .thumb_frame li:first-child img {
         display: block;
@@ -130,14 +77,17 @@
       <p>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</p>
       <p>requirement: jquery-1.4.2</p>
       <p>requirement: timers-1.1.2</p>
+      <p>
+        <input type="button" id="undock" value="undock"/>---
+        <input type="button" id="dock" value="dock"/>
+      </p>
     </div>
+
     <div id="igallery">
       <img src='' id='current_1' class="current" />
       <img src='' id='current_2' class="current"/>
-
       <div id="overlay">
       </div>
-
       <img src="images/prev.png" id="prev"/>
       <ul class='thumb_frame'>
         <li><img src="images/01s.jpg" source_src="images/01.jpg"/></li>
