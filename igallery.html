@@ -10,7 +10,9 @@
     <script type="text/javascript">
       $(document).ready(function(){
           var $i= -1;
-
+          var thumb_frame = $('.thumb_frame');
+ //        alert( (800 - thumb_frame.innerWidth())/2 );
+          thumb_frame.css({'left':(800 - thumb_frame.innerWidth())/2 });
           function showItem($j) {
             $('img.#next').unbind('click');
       			$('img.#prev').unbind('click');
@@ -88,7 +90,6 @@
         z-index: 1003;
         position: absolute;
         bottom: 0;
-        padding-left: 100px;
       }
       .thumb_frame li  {
         float: left;
@@ -114,13 +115,12 @@
         z-index: 100000;
         position: absolute;
         cursor: pointer;
+        bottom: 15px;
       }
       #prev {
-        bottom: 0;
         left: 0;
       }
       #next {
-        bottom: 0;
         right: 0;
       }
     </style>
