@@ -8,31 +8,24 @@
     <script type="text/javascript" src="jquery.timers-1.1.2.js"></script>
     <script type="text/javascript" src="jquery.igallery.js"></script>
     <script type="text/javascript">
+      $(document).ready(function(){
+          $('#igallery').igallery();
+      });
     </script>
     <style (type="text/css">
+      #overview {
+        padding: 10px;
+        position: fixed;
+        top: 0;
+        z-index: 10005;
+        background: #000;
+        color: #FFF;
+      }
       #igallery {
-        width: 800px;
-        height: 300px;
         margin: auto;
         margin-top: 100px;
-        border: 5px solid #131313;
-        position: relative;
-        background: url(images/div4.jpg) repeat 0 0;
-      }
-      #overlay {
-        opacity: 0.5;
-        filter:alpha(opacity=50);
-        background: #000;
-        position: absolute;
-        bottom: 0;
-        height: 60px;
-        z-index: 1002;
-        width: 100%;
       }
       .thumb_frame {
-        z-index: 1003;
-        position: absolute;
-        bottom: 0;
       }
       .thumb_frame li  {
         float: left;
@@ -44,6 +37,7 @@
         /*
         display: none;
         */
+        position: relative;
         width: 50px;
         height: 50px;
         background: #000;
@@ -53,56 +47,31 @@
       .thumb_frame li:first-child img {
         display: block;
       }
-      .current {
-        position: absolute;
-        top: 0;
-      }
-      .dock,
-      .undock,
-      #prev,
-      #next {
-        z-index: 100000;
-        position: absolute;
-        cursor: pointer;
-        bottom: 15px;
-      }
-      #prev {
-        left: 0;
-      }
-      #next {
-        right: 0;
-      }
-      .undock,
-      .dock {
-        right: 5px;
+      .overlay_tips {
       }
     </style>
   </head>
   <body>
-    <div id="t">
-      <p>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</p>
-      <p>requirement: jquery-1.4.2</p>
-      <p>requirement: timers-1.1.2</p>
+    <div id="overview">
+      <ul>
+        <li>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</li>
+       <li>requirement: jquery-1.4.2</li>
+       <li>requirement: timers-1.1.2</li>
+       <li>not support multiple igallery in on page yet.</li>
+       </li>
     </div>
 
     <div id="igallery">
-      <img src='' id='current_1' class="current" />
-      <img src='' id='current_2' class="current"/>
-      <div id="overlay">
-      </div>
-      <img src="images/prev.png" id="prev"/>
       <ul class='thumb_frame'>
-        <li><img src="images/01s.jpg" source_src="images/01.jpg"/></li>
-        <li><img src="images/02s.jpg" source_src="images/02.jpg" /></li>
-        <li><img src="images/03s.jpg" source_src="images/03.jpg"/></li>
-        <li><img src="images/04s.jpg" source_src="images/04.jpg"/></li>
-        <li><img src="images/05s.jpg" source_src="images/05.jpg"/></li>
-        <li><img src="images/06s.jpg" source_src="images/06.jpg" /></li>
-        <li><img src="images/07s.jpg" source_src="images/07.jpg" /></li>
-        <li><img src="images/08s.jpg" source_src="images/08.jpg" /></li>
+        <li><img src="images/01s.jpg" source_src="images/01.jpg" title="jquery igallery img1 title" /></li>
+        <li><img src="images/02s.jpg" source_src="images/02.jpg" title="jquery igallery img2 title" /></li>
+        <li><img src="images/03s.jpg" source_src="images/03.jpg" title="jquery igallery img3 title" /></li>
+        <li><img src="images/04s.jpg" source_src="images/04.jpg" title="jquery igallery img4 title" /></li>
+        <li><img src="images/05s.jpg" source_src="images/05.jpg" title="jquery igallery img5 title" /></li>
+        <li><img src="images/06s.jpg" source_src="images/06.jpg" title="jquery igallery img6 title" /></li>
+        <li><img src="images/07s.jpg" source_src="images/07.jpg" title="jquery igallery img7 title" /></li>
+        <li><img src="images/08s.jpg" source_src="images/08.jpg" title="jquery igallery img8 title" /></li>
       </ul>
-      <img src="images/next.png" id="next"/>
-      <img src="images/undock.png" class="undock" title="Undock into separate"/>
     </div>
 
   </body>

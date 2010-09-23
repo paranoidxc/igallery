@@ -1,128 +1,243 @@
-$(document).ready(function(){
-
-  $('#undock').click(function(){
-    $('#igallery').animate({ height: "+="+60 }, 400 );
-  });
-
-  $('#dock').click(function(){
-    $('#igallery').animate({ height: "-="+60 }, 400 );
-  });
-
-  var $i= -1;
-  var thumb_frame = $('.thumb_frame');
-  thumb_frame.css({'left':(800 - thumb_frame.innerWidth())/2 });
-
-  /**
-   * step
-   * init width of thumb_frame 
-   * init next img pointer position
-   * init prev img pointer position
-   * init dock/undock img pointer position
-   *
-   */
-  var width = 800;
-  var igallery = $('#igallery');
-
-  var ig_thumb_frame = $('.thumb_frame');
-  var thumb_img_items = ig_thumb_frame.find('img').length;
-  var ig_thumb_frame_width = thumb_img_items*50+thumb_img_items*10;
-  ig_thumb_frame.css({'width': ig_thumb_frame_width});
-
-  var ig_next = igallery.find('#next');
-  ig_next.css({'left': ig_thumb_frame_width + ig_thumb_frame.position().left });
-
-  var ig_prev = igallery.find('#prev');
-  ig_prev.css({'left': ig_thumb_frame.position().left-30 });
-
-
-  igallery.find('.undock').click(undock);
-  igallery.find('.dock').click(dock);
-
-  function dock() {
-    igallery.find('.dock,.undock').unbind('click');
-    $('#igallery').animate({ height: "-="+60 }, 400 );
-    $(this).removeClass('dock')
-      .addClass('undock')
-      .click(undock)
-      .attr('src','images/undock.png')
-      .attr('title','Undock into separate');
-  }
-
-  function undock(){
-    igallery.find('.dock,.undock').unbind('click');
-    $('#igallery').animate({ height: "+="+60 }, 400 );
-    $(this).removeClass('undock')
-      .addClass('dock')
-      .click(dock)
-      .attr('src','images/dock.png')
-      .attr('title','Dock into gallery');
-  }
-
-
-  function showItem($j) {
-    var last_index  = $j-1;
-    $('img.#next').unbind('click');
-    $('img.#prev').unbind('click');
-    //console.log("SHOW ITEM  === "+$j);
-    if( $j >= $('.thumb_frame li img').length ) {
-      $j=0;
-      console.log(' > = ');
-      last_index = $('.thumb_frame li img').length-1;
-    }else if( $j < 0 ){
-      $j = $('.thumb_frame li img').length -1;
-      last_index = $('.thumb_frame li img').length;
-    }
+(function($){	  
+  $.fn.igallery = function(options){
+    var opts = $.extend($.fn.igallery.defaults,options);
     
-    $i=$j;
-    $('.thumb_frame li.current_pointer')
-      .animate( {'top': "+="+10}, 400)
-      .removeClass('current_pointer');
+    /*Define gallery objects for reuse */
+    var igallery;
+    var id,img_path;
+    var iterator = -1;
+    var igallery_identfiy_code , transition_identify;
+    var tf,tf_imgs;
+    var photo1,photo2,undock,overlay,next,prev,overlay_tips;
 
-//    $($('.thumb_frame li')[$j]).addClass('current_pointer');
-//    $($('.thumb_frame li')[last_index]).animate( {'top': "+="+10}, 400);
-    $($('.thumb_frame li')[$j])
-      .animate( {'top': "-="+10}, 400)
-      .addClass('current_pointer');
-    
-    if( $("#current_2").attr('src').length > 0 ) {
-      $('#current_1').stop(true,true).attr('src', $('#current_2').attr('src')).css({'display':'block','z-index':1001}).fadeOut(400);
+
+    function showPrevItem() {
+      $(document).stopTime(transition_identify);
+      showItem(--iterator);
+      $(document).everyTime(opts.interval,transition_identify,function(){
+        showNextItem();
+      });
     }
 
-    $('#current_2')
-    .css({'display':'none','z-index':1000}).stop(true,true)
-    .attr('src', $($('.thumb_frame li')[$j]).find('img').attr('source_src')).fadeIn(400);
-    $('img.#next').click(showNextItem);
-    $('img.#prev').click(showPrevItem);		
-  }
+    function showNextItem() {
+      $(document).stopTime(transition_identify);
+      showItem(++iterator);
+      $(document).everyTime(opts.interval,transition_identify,function(){
+        showNextItem();
+      });
+    }
 
-  function showPrevItem() {
-    $(document).stopTime("transition");
-    showItem(--$i);
-    $(document).everyTime(2000,"transition",function(){
-      showNextItem();
-    });
-  }
 
-  function showNextItem() {
-    $(document).stopTime("transition");
-    //console.log( $i );
-    showItem(++$i);
-    $(document).everyTime(2000,"transition",function(){
-      showNextItem();
-    });
-  }
 
-  showNextItem();
+    function showItem(j) {
+      if( j >= tf_imgs.length ) {
+        iterator = j = 0;
+      }else if( j < 0 ){
+        iterator = j = tf_imgs.length -1;
+      }
+      var tf_img = $(tf_imgs[j]);
+      igallery.find( '.cp'+igallery_identfiy_code)
+              .animate( {'top': "+="+10}, opts.speed)
+              .removeClass('cp'+igallery_identfiy_code);
+      tf_img
+      .animate( {'top': "-="+10}, opts.speed)
+      .addClass('cp'+igallery_identfiy_code);
 
-  $("#next").click(showNextItem);
-  $("#prev").click(showPrevItem);
+      if( opts.overlay_tips ) {
+        overlay_tips
+          .text( tf_img.attr('title') );
+      }
 
-  $('.thumb_frame li').click(function(){
-    $(document).stopTime("transition");
-    showItem($(this).index());
-    $(document).everyTime(2000,"transition",function(){
-      showNextItem();
-    });
-  });
 
-});
+      if( photo2.attr('src') != undefined ) {
+        photo1
+          .stop(true,true)
+          .attr('src', photo2.attr('src'))
+          .css({'display':'block','z-index':1001}).fadeOut(opts.speed);
+      }
+      photo2
+        .css({'display':'none','z-index':1000, 'width':opts.gallery_width, 'height':opts.gallery_height})
+        .stop(true,true)
+        .attr('src', tf_img.attr('source_src')).fadeIn(opts.speed);
+    }
+
+    function dockCL() {
+      undock.unbind('click');
+      igallery.animate({ height: "-="+overlay.height() }, opts.speed );
+      $(this).removeClass('dock'+igallery_identfiy_code)
+        .addClass('undock'+igallery_identfiy_code)
+        .click(undockCL)
+        .attr('src',img_path+'undock.png')
+        .attr('title','Undock into separate');
+    }
+
+    function undockCL(){
+      undock.unbind('click');
+      igallery.animate({ height: "+="+overlay.height() }, opts.speed );
+      $(this).removeClass('undock'+igallery_identfiy_code)
+        .addClass('dock'+igallery_identfiy_code)
+        .click(dockCL)
+        .attr('src',img_path+'dock.png')
+        .attr('title','Dock into gallery');
+    }
+
+
+    /************************************************/
+    /* Main plugin code         */
+    /* set gallery prototype */
+    /************************************************/
+ 	  return this.each(function() {
+      igallery = $(this);
+      tf = igallery.find('.thumb_frame');
+      tf_imgs = tf.find('img');
+
+      id = igallery.attr('id');
+
+      igallery_identfiy_code = id+''+ (Math.random()+'').replace('.','');
+      transition_identify = 'transition' + igallery_identfiy_code;
+
+      igallery.css({
+        'width'     : opts.gallery_width,
+        'height'    : opts.gallery_height,
+        'border'    : opts.gallery_border,
+        'background': opts.gallery_bg,
+        'position'  : opts.gallery_position,
+        'margin'    : opts.gallery_margin
+      });
+
+      var tf_width = tf_imgs.length*opts.thumb_width +tf_imgs.length*10;
+      tf.css({'width': tf_width, 
+        'z-index': '1003',
+        'position': 'absolute',
+        'left'  : (opts.gallery_width-tf_width)/2
+      });
+
+      overlay = $('<div/>')
+                  .attr('id', 'overlay'+igallery_identfiy_code)
+                  .css({
+                      'opacity': '0.5', 'background':'#000',
+                      'position': 'absolute', 'bottom': '0',
+                      'height':  tf.height()+14,
+                      'z-index': '1002',
+                      'width': '100%' })
+                  .prependTo(igallery);
+      
+      tf.css({'bottom': (overlay.height() - tf.height())/2});
+
+
+      //Determine path between current page and filmstrip images
+			//Scan script tags and look for path to IGallery plugin
+      $('script').each(function(i){
+				var s = $(this);
+				if(s.attr('src') && s.attr('src').match(/jquery\.igallery/)){
+					img_path = s.attr('src').split('jquery.igallery')[0]+'themes/'+opts.theme+'/';	
+				}
+			});
+
+      next = $('<img />')
+              .attr('id','next'+igallery_identfiy_code)
+              .attr('src', img_path+'next.png')
+              .css({
+                  'position':'absolute',
+                  'cursor': 'pointer',
+                  'z-index':  '100000',
+                  'vertical-align':'middle',
+                  'left':tf_width + tf.position().left
+              })
+              .prependTo(igallery);
+      next.click(showNextItem);
+
+      prev = $('<img />')
+              .attr('id','prev'+igallery_identfiy_code)
+              .attr('src', img_path+'prev.png')
+              .css({
+                  'position':'absolute',
+                  'cursor': 'pointer',
+                  'z-index':  '100000',
+                  'vertical-align': 'bottom',
+                  'left':tf.position().left-30
+              })
+              .prependTo(igallery);
+
+      next.css({ 'bottom': (overlay.height()-next.height())/2 });
+      prev.css({ 'bottom': (overlay.height()-next.height())/2 });
+      prev.click(showPrevItem);
+
+      photo1 = $('<img />')
+        .attr('id', 'photo1'+igallery_identfiy_code)
+        .addClass(igallery_identfiy_code)
+        .prependTo(igallery);
+
+      photo2 = $('<img />')
+        .attr('id', 'photo2'+igallery_identfiy_code)
+        .addClass(igallery_identfiy_code)
+        .prependTo(igallery);
+
+      $(photo1, photo2).css({ 'position': 'absolute', 'top': '0','left':'0', 'width':opts.gallery_width, 'height':opts.gallery_height });
+
+      undock = $('<img />')
+                .attr('src', img_path+'undock.png')
+                .addClass('undock'+igallery_identfiy_code)
+                .css({ 'z-index': 100000, 'position': 'absolute', 'cursor': 'pointer', 'bottom': '15px','right': '5px' })
+                .attr('title',"Undock into separate")
+                .prependTo(igallery);
+
+      if( opts.overlay_tips ) {
+        overlay_tips = $('<div/>')
+                      .attr('id','overlay_tips'+igallery_identfiy_code)
+                      .css({
+                          'opacity': '0.5', 'background':'#000',
+                          'position': 'absolute', 'top': 10, 'right': 10,
+                          'z-index': '1002',
+                          'padding': 5,
+                          'color' : '#fff'
+                          })
+                      .prependTo(igallery);
+      }
+      
+      undock.css({ 'bottom': (overlay.height()-undock.height())/2 });
+
+      undock.click(undockCL);
+      showNextItem()
+
+      tf_imgs.click(function(){
+        $(document).stopTime(transition_identify);
+        var i;
+        for( i=0; i< tf_imgs.length; i ++ ){
+          if( $(tf_imgs[i]).attr('src') == $(this).attr('src') ){
+            break;
+          }
+        }
+        iterator = i;
+        showItem(iterator);
+        $(document).everyTime(opts.interval,transition_identify,function(){
+          showNextItem();
+        });
+      });
+
+    });/* END Main plugin code */
+
+  };
+
+
+ 
+
+  /************************************************/
+  /* igallery deafult settings        */
+  /* overwrite by igallery function   */
+  /************************************************/
+  $.fn.igallery.defaults = {
+    'gallery_width'   :800,
+    'gallery_height'  :300,
+    'gallery_border'  :'5px solid #131313',
+    'gallery_bg'      :'url(images/div4.jpg) repeat 0 0',
+    'gallery_position':'relative',
+    'theme'           :'light',
+    'overlay_tips'    : false,
+    'thumb_width'     :50,
+    'thumb_height'    :50,
+    'speed'           :400,
+    'interval'        :1000,
+    'z-index'	        :10000
+  };
+ })(jQuery);

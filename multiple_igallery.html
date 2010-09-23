@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>xiaochuanHuang's igallery jquery plugin</title>
+    <link type="text/css" rel="stylesheet" href="reset.css" /> 
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery.timers-1.1.2.js"></script>
+    <script type="text/javascript" src="jquery.igallery.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('#i1gallery,#i2gallery').igallery({
+            'gallery_width' :600,
+            'gallery_height':400,
+            'speed'         :400,
+            'interval'      :2000
+          });
+      })
+    </script>
+    <style (type="text/css">
+      #overlay {
+        opacity: 0.5;
+        filter:alpha(opacity=50);
+        background: #000;
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        z-index: 1002;
+        width: 100%;
+      }
+      .thumb_frame li  {
+        float: left;
+        margin-right: 10px;
+        cursor: pointer;
+        position: relative;
+      }
+      .thumb_frame li img {
+        /*
+        display: none;
+        */
+        position: relative;
+        width: 50px;
+        height: 50px;
+        background: #000;
+      }
+      .thumb_frame li img:hover {
+      }
+      .thumb_frame li:first-child img {
+        display: block;
+      }
+      .dock,
+      .undock,
+      #prev,
+      #next {
+        z-index: 100000;
+        position: absolute;
+        cursor: pointer;
+        bottom: 15px;
+      }
+      #prev {
+        left: 0;
+      }
+      #next {
+        right: 0;
+      }
+      .undock,
+      .dock {
+        right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="t">
+      <p>It's works on Firefox +,Chrome +, IE6,7,8 Not finish yet.</p>
+      <p>requirement: jquery-1.4.2</p>
+      <p>requirement: timers-1.1.2</p>
+    </div>
+
+    <div id="i1gallery">
+      <ul class='thumb_frame'>
+        <li><img src="gallery/1s.jpg" source_src="gallery/1.jpg"/></li>
+        <li><img src="gallery/2s.jpg" source_src="gallery/2.jpg" /></li>
+        <li><img src="gallery/3s.jpg" source_src="gallery/3.jpg"/></li>
+        <li><img src="gallery/4s.jpg" source_src="gallery/4.jpg"/></li>
+        <li><img src="gallery/5s.jpg" source_src="gallery/5.jpg"/></li>
+        <li><img src="gallery/6s.jpg" source_src="gallery/6.jpg" /></li>
+        <li><img src="gallery/7s.jpg" source_src="gallery/7.jpg" /></li>
+        <li><img src="gallery/8s.jpg" source_src="gallery/8.jpg" /></li>
+      </ul>
+    </div>
+
+
+     <div id="i2gallery">
+      <ul class='thumb_frame'>
+        <li><img src="gallery/1s.jpg" source_src="gallery/1.jpg"/></li>
+        <li><img src="gallery/2s.jpg" source_src="gallery/2.jpg" /></li>
+        <li><img src="gallery/3s.jpg" source_src="gallery/3.jpg"/></li>
+        <li><img src="gallery/4s.jpg" source_src="gallery/4.jpg"/></li>
+        <li><img src="gallery/5s.jpg" source_src="gallery/5.jpg"/></li>
+        <li><img src="gallery/6s.jpg" source_src="gallery/6.jpg" /></li>
+        <li><img src="gallery/7s.jpg" source_src="gallery/7.jpg" /></li>
+        <li><img src="gallery/8s.jpg" source_src="gallery/8.jpg" /></li>
+      </ul>
+    </div>
+
+  </body>
+</html>
