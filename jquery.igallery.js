@@ -159,8 +159,8 @@
               })
               .prependTo(igallery);
 
-      next.css({ 'bottom': (overlay.height()-next.height())/2 });
-      prev.css({ 'bottom': (overlay.height()-next.height())/2 });
+      next.css({ 'bottom': (overlay.height()-22)/2});
+      prev.css({ 'bottom': (overlay.height()-22)/2 });
       prev.click(showPrevItem);
 
       photo1 = $('<img />')
@@ -195,7 +195,7 @@
                       .prependTo(igallery);
       }
       
-      undock.css({ 'bottom': (overlay.height()-undock.height())/2 });
+      undock.css({ 'bottom': (overlay.height()-22)/2 });
 
       undock.click(undockCL);
       showNextItem()
