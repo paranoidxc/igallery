@@ -101,10 +101,10 @@
         'height'    : opts.gallery_height,
         'border'    : opts.gallery_border,
         'background': opts.gallery_bg,
-        'position'  : opts.gallery_position,
-        'margin'    : opts.gallery_margin
+        'position'  : opts.gallery_position
       });
 
+        /*'margin'    : opts.gallery_margin */
       var tf_width = tf_imgs.length*opts.thumb_width +tf_imgs.length*10;
       tf.css({'width': tf_width, 
         'z-index': '1003',
@@ -164,16 +164,17 @@
       prev.click(showPrevItem);
 
       photo1 = $('<img />')
-        .attr('id', 'photo1'+igallery_identfiy_code)
+        .attr({ 'src' : $(tf_imgs[0]).attr('source_src'), 'id': 'photo1'+igallery_identfiy_code})
         .addClass(igallery_identfiy_code)
         .prependTo(igallery);
 
       photo2 = $('<img />')
-        .attr('id', 'photo2'+igallery_identfiy_code)
+        .attr({ 'src' : $(tf_imgs[0]).attr('source_src'), 'id': 'photo2'+igallery_identfiy_code})
         .addClass(igallery_identfiy_code)
         .prependTo(igallery);
 
-      $(photo1, photo2).css({ 'position': 'absolute', 'top': '0','left':'0', 'width':opts.gallery_width, 'height':opts.gallery_height });
+      $(photo1).css({ 'position': 'absolute', 'top': '0','left':'0', 'width':opts.gallery_width, 'height':opts.gallery_height });
+      $(photo2).css({ 'position': 'absolute', 'top': '0','left':'0', 'width':opts.gallery_width, 'height':opts.gallery_height });
 
       undock = $('<img />')
                 .attr('src', img_path+'undock.png')
